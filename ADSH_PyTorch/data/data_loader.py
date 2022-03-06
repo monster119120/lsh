@@ -119,12 +119,13 @@ def wrap_data(data, targets, batch_size, root, dataset):
                 self.onehot_targets = self.targets
 
         def __getitem__(self, index):
+            # print(self.data[:5])
             if self.dataset == 'cifar-10':
                 img = Image.fromarray(self.data[index])
                 if self.transform is not None:
                     img = self.transform(img)
             else:
-                img = Image.open(os.path.join(self.root, self.data[index])).convert('RGB')
+                img = Image.open(self.data[index]).convert('RGB')
                 img = self.transform(img)
             return img, self.targets[index], index
 
@@ -135,7 +136,7 @@ def wrap_data(data, targets, batch_size, root, dataset):
             """
             Return one-hot encoding targets.
             """
-            return torch.from_numpy(self.onehot_targets).float()
+            return self.onehot_targets.float()
 
     dataset = MyDataset(data, targets, root, dataset)
     dataloader = DataLoader(

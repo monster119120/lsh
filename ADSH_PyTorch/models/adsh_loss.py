@@ -15,8 +15,8 @@ class ADSH_Loss(nn.Module):
         self.gamma = gamma
 
     def forward(self, F, B, S, omega):
-        hash_loss = ((self.code_length * S - F @ B.t()) ** 2).sum()
-        quantization_loss = ((F - B[omega, :]) ** 2).sum()
+        hash_loss = ((self.code_length * S - F @ B.t()) ** 2).mean()
+        quantization_loss = ((F - B[omega, :]) ** 2).mean()
         loss = (hash_loss + self.gamma * quantization_loss) / (F.shape[0] * B.shape[0])
 
         return loss

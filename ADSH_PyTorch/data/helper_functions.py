@@ -100,11 +100,14 @@ class AverageMeter(object):
 
 
 class CocoDetection(datasets.coco.CocoDetection):
-    def __init__(self, root, annFile, transform=None, target_transform=None):
+    def __init__(self, root, annFile, transform=None, target_transform=None, num=10000):
         self.root = root
         self.coco = COCO(annFile)
-
+        
         self.ids = list(self.coco.imgToAnns.keys())
+        random.shuffle(self.ids)
+        self.ids = self.ids[:num]
+
         print(self.ids[-1])
         self.transform = transform
         self.target_transform = target_transform
@@ -114,11 +117,11 @@ class CocoDetection(datasets.coco.CocoDetection):
         # print(self.cat2cat)
 
         self.data = []
-        self.onehot_targets = []
+        self.targets = []
         for img_id in self.ids:
             ann_ids = self.coco.getAnnIds(imgIds=img_id)
             path = self.coco.loadImgs(img_id)[0]['file_name']
-            self.data.append(path)
+            self.data.append(str(self.root+ '/' +path))
 
             target = self.coco.loadAnns(ann_ids)
 
@@ -128,12 +131,13 @@ class CocoDetection(datasets.coco.CocoDetection):
 
             target = output
             # target = target.max(dim=1)[0]
-            self.onehot_targets.append(target)
-        self.onehot_targets = torch.vstack(self.onehot_targets).numpy()
+            self.targets.append(target)
+        self.data = np.array(self.data)
+        self.targets = torch.vstack(self.targets)
 
     def get_onehot_targets(self):
         
-        return self.onehot_targets
+        return self.targets.float()
 
     def __getitem__(self, index):
         coco = self.coco

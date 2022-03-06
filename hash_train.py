@@ -291,10 +291,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=__doc__)
 
-    parser.add_argument('-p', '--data-path', default='/data/yuweiping/coco/', help='dataset path')
-    parser.add_argument('--dataset', default='voc2007', help='dataset')
+    parser.add_argument('-p', '--data-path', default='data/coco/', help='dataset path')
+    parser.add_argument('--dataset', default='coco', help='dataset')
     parser.add_argument('--model', default='fasterrcnn_resnet50_fpn', help='model')
-    parser.add_argument('--device', default='cuda', help='device')
+    parser.add_argument('--device', default='cpu', help='device')
     parser.add_argument('-b', '--batch-size', default=4, type=int,
                         help='images per gpu, the total batch size is $NGPU x batch_size')
     parser.add_argument('-cp', '--first-checkpoint-path', default='/data/yuweiping/coco/',

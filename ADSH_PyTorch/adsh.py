@@ -8,7 +8,7 @@ import utils.evaluate as evaluate
 from loguru import logger
 from models.adsh_loss import ADSH_Loss
 from data.data_loader import sample_dataloader
-from src_files.models import create_model
+# from src_files.models import create_model
 
 
 def train(
@@ -63,6 +63,8 @@ def train(
     B = torch.randn(num_retrieval, code_length).to(device)
     retrieval_targets = retrieval_dataloader.dataset.get_onehot_targets().to(device)
 
+    print('all data loaded!')
+
     start = time.time()
     for it in range(max_iter):
         iter_start = time.time()
@@ -98,7 +100,7 @@ def train(
 
         # Total loss
         iter_loss = calc_loss(U, B, S, code_length, sample_index, gamma)
-        logger.debug('[iter:{}/{}][loss:{:.2f}][iter_time:{:.2f}]'.format(it+1, max_iter, iter_loss, time.time()-iter_start))
+        logger.info('[iter:{}/{}][loss:{:.2f}][iter_time:{:.2f}]'.format(it+1, max_iter, iter_loss, time.time()-iter_start))
     logger.info('[Training time:{:.2f}]'.format(time.time()-start))
 
     # Evaluate

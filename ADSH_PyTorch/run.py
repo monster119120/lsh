@@ -1,5 +1,8 @@
 import torch
 import argparse
+
+from torch.utils.data import SubsetRandomSampler
+
 import adsh
 
 from loguru import logger
@@ -7,6 +10,7 @@ from data.helper_functions import CocoDetection
 import torchvision.transforms as transforms
 from data.helper_functions import CutoutPIL
 from randaugment import RandAugment
+import random
 
 
 def run():
@@ -25,6 +29,7 @@ def run():
     #     args.batch_size,
     #     args.num_workers,
     # )
+    init_num = 10000
 
     root_path = '../data/validation/data'
     train_dataset = CocoDetection(root=root_path,
@@ -35,11 +40,12 @@ def run():
                                       RandAugment(),
                                       transforms.ToTensor(),
                                       # normalize,
-                                  ]))
+                                  ]),
+                                  num=init_num)
     
     retrieval_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=args.batch_size, shuffle=True,
-        num_workers=args.workers, pin_memory=True)
+        num_workers=args.workers, pin_memory=True,)
 
     for code_length in args.code_length:
         mAP = adsh.train(
@@ -78,11 +84,11 @@ def load_config():
                         help='Path of dataset')
     parser.add_argument('--batch-size', default=64, type=int,
                         help='Batch size.(default: 64)')
-    parser.add_argument('--lr', default=1e-4, type=float,
+    parser.add_argument('--lr', default=1e-3, type=float,
                         help='Learning rate.(default: 1e-4)')
-    parser.add_argument('--code-length', default='12,24,32,48', type=str,
+    parser.add_argument('--code-length', default='48,64,84,108', type=str,
                         help='Binary hash code length.(default: 48,64,84,108)')
-    parser.add_argument('--max-iter', default=50, type=int,
+    parser.add_argument('--max-iter', default=100, type=int,
                         help='Number of iterations.(default: 50)')
     parser.add_argument('--max-epoch', default=3, type=int,
                         help='Number of epochs.(default: 3)')
@@ -90,11 +96,11 @@ def load_config():
                         help='Number of query data points.(default: 1000)')
     parser.add_argument('--num-samples', default=2000, type=int,
                         help='Number of sampling data points.(default: 2000)')
-    parser.add_argument('--num-workers', default=0, type=int,
+    parser.add_argument('--num-workers', default=8, type=int,
                         help='Number of loading data threads.(default: 0)')
     parser.add_argument('--topk', default=-1, type=int,
                         help='Calculate map of top k.(default: all)')
-    parser.add_argument('--gpu', default=None, type=int,
+    parser.add_argument('--gpu', default=0, type=int,
                         help='Using gpu.(default: False)')
     parser.add_argument('--gamma', default=200, type=float,
                         help='Hyper-parameter.(default: 200)')
