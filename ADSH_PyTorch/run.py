@@ -72,7 +72,7 @@ def load_config():
         args(argparse.ArgumentParser): Configuration.
     """
     parser = argparse.ArgumentParser(description='ADSH_PyTorch')
-    parser.add_argument('--dataset',
+    parser.add_argument('--dataset',default='coco',
                         help='Dataset name.')
     parser.add_argument('--root',
                         help='Path of dataset')
@@ -98,7 +98,6 @@ def load_config():
                         help='Using gpu.(default: False)')
     parser.add_argument('--gamma', default=200, type=float,
                         help='Hyper-parameter.(default: 200)')
-
 
     parser.add_argument('--model-name', default='tresnet_l')
     parser.add_argument('--model-path',

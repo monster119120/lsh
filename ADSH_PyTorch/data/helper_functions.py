@@ -20,6 +20,7 @@ import torch.utils.data as data
 from sklearn.preprocessing import MultiLabelBinarizer
 import pandas as pd
 
+# from .transform import encode_onehot
 
 
 def parse_args(parser):
@@ -112,6 +113,28 @@ class CocoDetection(datasets.coco.CocoDetection):
             self.cat2cat[cat] = len(self.cat2cat)
         # print(self.cat2cat)
 
+        self.data = []
+        self.onehot_targets = []
+        for img_id in self.ids:
+            ann_ids = self.coco.getAnnIds(imgIds=img_id)
+            path = self.coco.loadImgs(img_id)[0]['file_name']
+            self.data.append(path)
+
+            target = self.coco.loadAnns(ann_ids)
+
+            output = torch.zeros((80,), dtype=torch.long)
+            for obj in target:
+                output[self.cat2cat[obj['category_id']]] = 1
+
+            target = output
+            # target = target.max(dim=1)[0]
+            self.onehot_targets.append(target)
+        self.onehot_targets = torch.vstack(self.onehot_targets).numpy()
+
+    def get_onehot_targets(self):
+        
+        return self.onehot_targets
+
     def __getitem__(self, index):
         coco = self.coco
         img_id = self.ids[index]
@@ -129,18 +152,10 @@ class CocoDetection(datasets.coco.CocoDetection):
         # target = output
         # target = target.max(dim=1)[0] # we dont use the small vs large information in multi-label detection
         
-        output = torch.zeros((80, ), dtype=torch.long)
+        output = torch.zeros((80,), dtype=torch.long)
         for obj in target:
             output[self.cat2cat[obj['category_id']]] = 1
-            
-        
-        for obj in target:
-            if obj['area'] < 32 * 32:
-                output[0][self.cat2cat[obj['category_id']]] = 1
-            elif obj['area'] < 96 * 96:
-                output[1][self.cat2cat[obj['category_id']]] = 1
-            else:
-                output[2][self.cat2cat[obj['category_id']]] = 1
+
         target = output
         target = target.max(dim=1)[0] # we dont use the small vs large information in multi-label detection
 
