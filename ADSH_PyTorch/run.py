@@ -84,11 +84,11 @@ def load_config():
                         help='Path of dataset')
     parser.add_argument('--batch-size', default=64, type=int,
                         help='Batch size.(default: 64)')
-    parser.add_argument('--lr', default=1e-3, type=float,
+    parser.add_argument('--lr', default=1e-4, type=float,
                         help='Learning rate.(default: 1e-4)')
     parser.add_argument('--code-length', default='48,64,84,108', type=str,
                         help='Binary hash code length.(default: 48,64,84,108)')
-    parser.add_argument('--max-iter', default=100, type=int,
+    parser.add_argument('--max-iter', default=50, type=int,
                         help='Number of iterations.(default: 50)')
     parser.add_argument('--max-epoch', default=3, type=int,
                         help='Number of epochs.(default: 3)')

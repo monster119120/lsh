@@ -74,7 +74,7 @@ def train(
         # Create Similarity matrix
         train_targets = train_dataloader.dataset.get_onehot_targets().to(device)
         S = (train_targets @ retrieval_targets.t() > 0).float()
-        S = torch.where(S == 1, torch.full_like(S, 1), torch.full_like(S, -1))
+        S = torch.where(S >= 1, torch.full_like(S, 1), torch.full_like(S, -1))
 
         # Soft similarity matrix, benefit to converge
         r = S.sum() / (1 - S).sum()
