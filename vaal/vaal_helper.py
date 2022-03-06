@@ -5,7 +5,7 @@ import torch.nn.init as init
 from torchvision import transforms
 import numpy as np
 import random
-import cv2
+# import cv2
 
 
 class View(nn.Module):

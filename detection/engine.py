@@ -5,8 +5,8 @@ import torch
 import itertools
 from terminaltables import AsciiTable
 import numpy as np
-import cv2
-from mmcv.utils import print_log
+# import cv2
+# from mmcv.utils import print_log
 
 import torchvision.models.detection.mask_rcnn
 
@@ -251,6 +251,6 @@ def coco_evaluate(model, data_loader, classwise=True, feature=False):
         table_data = [headers]
         table_data += [result for result in results_2d]
         table = AsciiTable(table_data)
-        print_log('\n' + table.table)
+        # print_log('\n' + table.table)
     torch.set_num_threads(n_threads)
     return coco_evaluator

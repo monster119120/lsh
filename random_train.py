@@ -86,11 +86,11 @@ def train_one_epoch(task_model, task_optimizer, data_loader, device, cycle, epoc
 
 
 def main(args):
-    torch.cuda.set_device(0)
+    # torch.cuda.set_device(0)
     random.seed(0)
     torch.manual_seed(0)
-    torch.cuda.manual_seed(0)
-    torch.cuda.manual_seed_all(0)
+    # torch.cuda.manual_seed(0)
+    # torch.cuda.manual_seed_all(0)
     utils.init_distributed_mode(args)
     print(args)
 
@@ -207,6 +207,7 @@ def main(args):
                 utils.save_on_master({
                     'model': task_model.state_dict(), 'args': args},
                     os.path.join(args.first_checkpoint_path, '{}_retinanet_1st.pth'.format(args.dataset)))
+        
         random.shuffle(unlabeled_set)
         # Update the labeled dataset and the unlabeled dataset, respectively
         labeled_set += unlabeled_set[:budget_num]
@@ -225,13 +226,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=__doc__)
 
-    parser.add_argument('-p', '--data-path', default='/data/yuweiping/coco/', help='dataset path')
-    parser.add_argument('--dataset', default='voc2007', help='dataset')
+    parser.add_argument('-p', '--data-path', default='data/coco/', help='dataset path')
+    parser.add_argument('--dataset', default='coco', help='dataset')
     parser.add_argument('--model', default='fasterrcnn_resnet50_fpn', help='model')
-    parser.add_argument('--device', default='cuda', help='device')
+    parser.add_argument('--device', default='cpu', help='device')
     parser.add_argument('-b', '--batch-size', default=4, type=int,
                         help='images per gpu, the total batch size is $NGPU x batch_size')
-    parser.add_argument('-cp', '--first-checkpoint-path', default='/data/yuweiping/',
+    parser.add_argument('-cp', '--first-checkpoint-path', default='/check_points',
                         help='path to save checkpoint of first cycle')
     parser.add_argument('--task_epochs', default=20, type=int, metavar='N',
                         help='number of total epochs to run')

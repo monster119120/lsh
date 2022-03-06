@@ -3,7 +3,7 @@ import torchvision
 from torchvision import utils as vutils
 import numpy as np
 import random
-import cv2
+# import cv2
 
 
 def get_uncertainty(task_model, unlabeled_loader):
