@@ -9,10 +9,12 @@ class Resnext50(nn.Module):
     def __init__(self, n_classes=90, code_length=48):
         super().__init__()
         self.model = models.resnext50_32x4d(pretrained=True)
-        # for para in self.model.parameters():
-        #     para.requires_grad = False
+        for para in self.model.parameters():
+            para.requires_grad = False
         
         self.hash_layer = nn.Sequential(
+            nn.Linear(self.model.fc.in_features, self.model.fc.in_features),
+            nn.ReLU(),
             nn.Linear(self.model.fc.in_features, code_length),
             nn.Tanh(),
         )
