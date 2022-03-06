@@ -26,8 +26,9 @@ def run():
     #     args.num_workers,
     # )
 
-    train_dataset = CocoDetection(root='./',
-                                  annFile='../data/coco/annotations/instances_val2017.json',
+    root_path = '../data/validation/data'
+    train_dataset = CocoDetection(root=root_path,
+                                  annFile='../data/raw/instances_val2017.json',
                                   transform= transforms.Compose([
                                       transforms.Resize((args.image_size, args.image_size)),
                                       CutoutPIL(cutout_factor=0.5),
