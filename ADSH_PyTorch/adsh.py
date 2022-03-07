@@ -119,7 +119,7 @@ def train(
     torch.save(B.cpu(), os.path.join('checkpoints', 'database_code.t'))
     # torch.save(query_dataloader.dataset.get_onehot_targets, os.path.join('checkpoints', 'query_targets.t'))
     torch.save(retrieval_targets.cpu(), os.path.join('checkpoints', 'database_targets.t'))
-    torch.save(model.cpu(), os.path.join('checkpoints', 'model.t'))
+    torch.save(model.cpu(), '../model.pth')
 
     # return mAP
 
