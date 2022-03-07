@@ -29,7 +29,7 @@ def run():
     #     args.batch_size,
     #     args.num_workers,
     # )
-    init_num = 10000
+    init_num = 50000
 
     root_path = '../data/validation/data'
     train_dataset = CocoDetection(root=root_path,
@@ -86,8 +86,8 @@ def load_config():
                         help='Batch size.(default: 64)')
     parser.add_argument('--lr', default=1e-4, type=float,
                         help='Learning rate.(default: 1e-4)')
-    parser.add_argument('--code-length', default='48,64,84,108', type=str,
-                        help='Binary hash code length.(default: 48,64,84,108)')
+    parser.add_argument('--code-length', default='12,24,32,48', type=str,
+                        help='Binary hash code length.(default: 12,24,32,48)')
     parser.add_argument('--max-iter', default=50, type=int,
                         help='Number of iterations.(default: 50)')
     parser.add_argument('--max-epoch', default=3, type=int,
