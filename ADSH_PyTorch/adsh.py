@@ -104,15 +104,15 @@ def train(
     logger.info('[Training time:{:.2f}]'.format(time.time()-start))
 
     # Evaluate
-    # query_code = generate_code(model, query_dataloader, code_length, device)
-    # mAP = evaluate.mean_average_precision(
-    #     query_code.to(device),
-    #     B,
-    #     query_dataloader.dataset.get_onehot_targets().to(device),
-    #     retrieval_targets,
-    #     device,
-    #     topk,
-    # )
+    query_code = generate_code(model, retrieval_dataloader, code_length, device)
+    mAP = evaluate.mean_average_precision(
+        query_code.to(device),
+        B,
+        retrieval_dataloader.dataset.get_onehot_targets().to(device),
+        retrieval_targets,
+        device,
+        topk,
+    )
 
     # Save checkpoints
     # torch.save(query_code.cpu(), os.path.join('checkpoints', 'query_code.t'))
